@@ -1,0 +1,74 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.text {
+  color: #fff;
+  text-shadow: 2px 2px 2px #000;
+}
+
+.gameBord {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  min-width: 320px;
+  min-height: 320px;
+  background-color: darkgrey;
+  position: relative;
+}
+
+.item {
+  width: 32px;
+  height: 32px;
+  background-color: #fff;
+  border: 1px solid rgb(175, 175, 175);
+  box-sizing: border-box;
+}
+
+.game-over {
+  position: absolute;
+  color: azure;
+  top: 10%;
+  left: 25%;
+  text-shadow: 2px 2px 2px #000;
+}
+
+.App section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 100px;
+  color: #fff;
+}
+
+.App section p {
+  font-size: 20px;
+  text-shadow: 2px 2px 2px #000;
+}
+
+
+button {
+  width: 80px;
+  padding: 10px;
+  font-weight: 700;
+  /* border: 1px solid #fff; */
+  border-radius: 8px;
+  box-shadow: 2px 2px 2px dimgray;
+  /* color: #fff; */
+  background-color: transparent;
+  border: 1px solid cadetblue;
+  color: cadetblue;
+}
+
+button:hover,
+button:focus {
+  background-color:cadetblue;
+  color: #fff
+}
+
+/* button:active {
+  border: 1px solid #000;
+  color: #000;
+} */
