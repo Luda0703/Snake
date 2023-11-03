@@ -1,4 +1,5 @@
-import { useState, useEffect, FC } from 'react';
+import { useState, useEffect, FC } from "react";
+import "./HighScores.css";
 
 type HighScoresProps = {
   name: string;
@@ -6,35 +7,32 @@ type HighScoresProps = {
 };
 
 export const HighScores: FC<HighScoresProps> = () => {
-  const [highScores, setHighScores] = useState<any[]>([]);
+  const [highScores, setHighScores] = useState<HighScoresProps[]>([]);
 
   useEffect(() => {
-    fetch('/api/high-scores')
+    fetch("http://localhost:8080/api/record")
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Network response was not ok: ${response.status}`);
         }
         return response.json();
       })
-      .then((data) => setHighScores(data))
-      .catch((error) => console.error('Error fetching data:', error));
+      .then((data: HighScoresProps[]) => setHighScores(data))
+      .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
   return (
-    <div>
-      <h2>Лучшие счета</h2>
-      <ul>
-        {highScores.map((score, index) => (
-          <li key={index}>
-            {score.name}: {score.speed} очков
-          </li>
-        ))}
-      </ul>
+    <div className="gamers_list">
+      <h2 className="gamer">List of players</h2>
+      <div className="select-wrapper">
+        <select>
+          {highScores.map((score, index) => (
+            <option key={index}>
+              {score.name}: {score.speed} points
+            </option>
+          ))}
+        </select>
+      </div>
     </div>
   );
 };
-
-
-
-
-

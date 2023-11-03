@@ -40,12 +40,29 @@ const MouseController: FC<TMouseControllerProps> = ({
   return (
     <div className="controller">
       <div>
-        <button className='nav' onClick={() => setDirectionHandler("ArrowLeft")}>left</button>
-        <button className='nav' onClick={() => setDirectionHandler("ArrowRight")}>right</button>
+        <button
+          className="nav"
+          onClick={() => setDirectionHandler("ArrowLeft")}
+        >
+          left
+        </button>
+        <button
+          className="nav"
+          onClick={() => setDirectionHandler("ArrowRight")}
+        >
+          right
+        </button>
       </div>
       <div>
-        <button className='nav' onClick={() => setDirectionHandler("ArrowUp")}>up</button>
-        <button className='nav' onClick={() => setDirectionHandler("ArrowDown")}>down</button>
+        <button className="nav" onClick={() => setDirectionHandler("ArrowUp")}>
+          up
+        </button>
+        <button
+          className="nav"
+          onClick={() => setDirectionHandler("ArrowDown")}
+        >
+          down
+        </button>
       </div>
     </div>
   );

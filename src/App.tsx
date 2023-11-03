@@ -6,8 +6,8 @@ import MouseController from "./components/MouseController/MouseController";
 import Snake from "./components/Snake/Snake";
 import StartBoard from "./components/StartBoard/StartBoard";
 import { ISnake } from "./interfases/ISnake";
-import RegisterForm from './components/RegisterForm/RegisterForm';
-import { handlePlayerNameSubmit, sendGameResult } from "./options"; 
+import RegisterForm from "./components/RegisterForm/RegisterForm";
+import { handlePlayerNameSubmit, sendGameResult } from "./options";
 import { HighScores } from "./components/HighScores/HighScores";
 
 function App() {
@@ -22,23 +22,28 @@ function App() {
   const [speed, setSpeed] = useState<number>(0);
   const [totalSpeed, setTotalSpeed] = useState<number>(0);
   enum FoodType {
-    First = 'first',
-    Second = 'second',
-    Third = 'third',
+    First = "first",
+    Second = "second",
+    Third = "third",
   }
-  
+
   const foodValues: Record<FoodType, number> = {
     [FoodType.First]: 1,
     [FoodType.Second]: 5,
     [FoodType.Third]: 10,
   };
- 
+
   function generateFood(): { x: number; y: number; type: FoodType } {
     const x = Math.floor(Math.random() * BOARD_LENGTH);
     const y = Math.floor(Math.random() * BOARD_LENGTH);
-  
-    const randomType = Math.random() < 0.4 ? FoodType.First : Math.random() < 0.7 ? FoodType.Second : FoodType.Third;
-  
+
+    const randomType =
+      Math.random() < 0.4
+        ? FoodType.First
+        : Math.random() < 0.7
+        ? FoodType.Second
+        : FoodType.Third;
+
     return { x, y, type: randomType };
   }
 
@@ -46,16 +51,14 @@ function App() {
   const [food, setFood] = useState(generateFood);
   const [isGame, setIsGame] = useState<boolean>(false);
 
-  const [name, setName] = useState<string>('');
-
-
+  const [name, setName] = useState<string>("");
 
   const startGameHangler = () => {
     setLevel(1);
     setSpeed(0);
     setGameOver(false);
     setFood(generateFood);
-    
+
     setDirection("right");
     setSnake([
       { x: 1, y: 0 },
@@ -128,8 +131,6 @@ function App() {
     setSnake(newSnake);
   }, [snake, direction]);
 
-  
-
   useEffect(() => {
     const moveInterval = setInterval(snakeMoveHandler, 700 - level * 50);
     return () => {
@@ -175,7 +176,6 @@ function App() {
         }
       }
     }
-    
   }, [food, snake, speed, level, totalSpeed]);
 
   useEffect(() => {
@@ -197,33 +197,36 @@ function App() {
   function handlePlayerNameSubmitOn(name: string) {
     setName(name);
     handlePlayerNameSubmit(name);
-    
+
     console.log(`Имя игрока: ${name}`);
   }
 
-  function handleGameEnd(name: string, speed: number ) {
+  function handleGameEnd(name: string, speed: number) {
     sendGameResult(name, speed);
   }
 
   return (
     <>
-      <RegisterForm onSubmit={handlePlayerNameSubmitOn} /> 
+      <RegisterForm onSubmit={handlePlayerNameSubmitOn} />
       <div className="App">
         <h1 className="text">SNAKE GAME</h1>
         <HighScores />
-        <p className="gamer">Welcome {name}</p> 
+        <p className="gamer">Welcome {name}</p>
         <section>
           <p className="level-speed">Level: {level}</p>
           <p className="level-speed">Points: {speed}</p>
         </section>
         {!isGame ? (
-          <StartBoard startFn={startGameHangler} tSpeed={totalSpeed}/>
+          <StartBoard startFn={startGameHangler} tSpeed={totalSpeed} />
         ) : (
           <div className="gameBord">
             {!gameOver ? (
               <Food x={food.x} y={food.y} />
             ) : (
-              <GameOverBoard startFn={startGameHangler} tSpeed={handleGameEnd} />
+              <GameOverBoard
+                startFn={startGameHangler}
+                tSpeed={handleGameEnd}
+              />
             )}
             {!gameOver &&
               Array.from({ length: BOARD_LENGTH * BOARD_LENGTH }, (_, i) => (
@@ -241,7 +244,7 @@ function App() {
       </div>
       <MouseController direction={direction} setDirection={setDirection} />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

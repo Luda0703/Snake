@@ -27,7 +27,7 @@ export interface GameData {
 
 export const sendGameResult = async (name: string, speed: number) => {
   try {
-    const response = await fetch('http://localhost:8080/api/high-scores', {
+    const response = await fetch('http://localhost:8080/api/record', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
