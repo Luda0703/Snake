@@ -3,28 +3,21 @@ import {FC, ChangeEvent, FormEvent, useState} from 'react';
 import './RegisterForm.css';
 
 interface PlayerNameFormProps {
-    onSubmit: (name: string, surname: string) => void;
+    onSubmit: (name: string) => void;
   }
 
 const RegisterForm: FC<PlayerNameFormProps> = ({onSubmit}) => {
     const [name, setName] = useState<string>('');
-    const [surname, setSurname] = useState<string>('');
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        onSubmit(name, surname);
+        onSubmit(name);
+        setName('')
       };
 
     return (
         <form onSubmit={handleSubmit} autoComplete="off" className='container_form'>
-      <label className='label'>
-        Name
-        <input type="text" value={name} className='input_label' onChange={(e: ChangeEvent) => setName(e.target.value)} required/>
-      </label>
-      <label className='label'>
-        Surname
-        <input type="text" value={surname}  className='input_label' onChange={(e: ChangeEvent) => setSurname(e.target.value)} required/>
-      </label>
+        <input placeholder="Enter your name" type="text" value={name} className='input_label' onChange={(e: ChangeEvent) => setName(e.target.value)} required/>
       <button type="submit" className='btn'>Start the game</button>
     </form>
     )

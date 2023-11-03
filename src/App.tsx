@@ -30,8 +30,6 @@ function App() {
   const [isGame, setIsGame] = useState<boolean>(false);
 
   const [name, setName] = useState<string>('');
-  const [surname, setSurname] = useState<string>('');
-  const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
 
   const startGameHangler = () => {
     setLevel(1);
@@ -170,25 +168,21 @@ function App() {
     }
   }, [totalSpeed]);
 
-  function handlePlayerNameSubmitOn(name: string, surname: string) {
+  function handlePlayerNameSubmitOn(name: string) {
     setName(name);
-    setSurname(surname);
-    handlePlayerNameSubmit(name, surname);
-    console.log(`Имя игрока: ${name} ${surname}`);
-    setIsFormSubmitted(true);
+    handlePlayerNameSubmit(name);
+    console.log(`Имя игрока: ${name}`);
   }
 
   return (
     <div>
-    {/* {!isFormSubmitted ? (  */}
       <RegisterForm onSubmit={handlePlayerNameSubmitOn} /> 
-    {/* ) : (  */}
       <div className="App">
         <h1 className="text">SNAKE GAME</h1>
-        <p className="gamer">Welcome {name} {surname}</p> 
+        <p className="gamer">Welcome {name} </p> 
         <section>
-          <p className="level-speed">LEVEL: {level}</p>
-          <p className="level-speed">SPEED: {speed}</p>
+          <p className="level-speed">Level: {level}</p>
+          <p className="level-speed">Score: {speed}</p>
         </section>
         {!isGame ? (
           <StartBoard startFn={startGameHangler} tSpeed={totalSpeed}/>
@@ -214,7 +208,6 @@ function App() {
         )}
       </div>
       <MouseController direction={direction} setDirection={setDirection} />
-   {/* )}  */}
     </div>
   )
 }

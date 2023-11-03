@@ -1,12 +1,12 @@
 
-export function handlePlayerNameSubmit(name: string, surname: string) {
+export function handlePlayerNameSubmit(name: string) {
   // Отправляем имя игрока на сервер
   fetch('http://localhost:8080/api/user', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ name, surname }),
+    body: JSON.stringify({ name }),
   })
     .then((response) => {
       if (response.ok) {

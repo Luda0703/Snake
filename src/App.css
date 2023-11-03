@@ -1,13 +1,14 @@
 .App {
-  display: flex;
+  display: flex; 
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
 }
 
 .text {
-  color: #fff;
-  text-shadow: 2px 2px 2px #000;
+  color: cadetblue;
+  margin: 0;
 }
 
 .gameBord {
@@ -26,14 +27,14 @@
   border: 1px solid rgb(175, 175, 175);
   box-sizing: border-box;
 }
-
+/* 
 .game-over {
   position: absolute;
   color: azure;
   top: 10%;
   left: 25%;
   text-shadow: 2px 2px 2px #000;
-}
+} */
 
 .App section {
   width: 100%;
@@ -43,10 +44,10 @@
   color: #fff;
 }
 
-.App section p {
-  font-size: 20px;
+/* .App section p {
+  
   text-shadow: 2px 2px 2px #000;
-}
+} */
 
 
 button {
@@ -69,8 +70,18 @@ button:focus {
   color: #fff
 }
 
+
+
 .gamer {
   justify-content: start;
-  color: #fff;
+  color: cadetblue;
   font-size: 20px;
+}
+
+.level-speed {
+  font-size: 20px;
+  color: cadetblue;
+  margin: 0;
+  /* margin-top: 0;
+  margin-bottom: 10px; */
 }
