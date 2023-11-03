@@ -1,6 +1,5 @@
 
 export function handlePlayerNameSubmit(name: string) {
-  // Отправляем имя игрока на сервер
   fetch('http://localhost:8080/api/user', {
     method: 'POST',
     headers: {
@@ -10,8 +9,7 @@ export function handlePlayerNameSubmit(name: string) {
   })
     .then((response) => {
       if (response.ok) {
-        console.log('Имя игрока успешно отправлено на сервер');
-        // Здесь вы можете выполнить дополнительные действия после успешной отправки
+        console.log('Имя игрока успешно отправлено на сервер');       
       } else {
         console.error('Не удалось отправить имя игрока на сервер');
       }
@@ -27,14 +25,14 @@ export interface GameData {
   foodPosition: [number, number];
 }
 
-export const sendGameResult = async (playerName: string, score: number, gameData: GameData) => {
+export const sendGameResult = async (name: string, speed: number) => {
   try {
-    const response = await fetch('/api/score', {
+    const response = await fetch('http://localhost:8080/api/high-scores', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ playerName, score, gameData }),
+      body: JSON.stringify({ name, speed }),
     });
 
     if (response.ok) {
@@ -48,24 +46,24 @@ export const sendGameResult = async (playerName: string, score: number, gameData
 };
 
 
-export interface HighScore {
-  playerName: string;
-  score: number;
-}
+// export interface HighScore {
+//   playerName: string;
+//   score: number;
+// }
 
-export const getHighScores = async (): Promise<HighScore[]> => {
-  try {
-    const response = await fetch('/api/high-scores');
-    if (response.ok) {
-      const highScores: HighScore[] = await response.json();
-      return highScores;
-    } else {
-      console.error('Не удалось получить список рекордов');
-      return [];
-    }
-  } catch (error) {
-    console.error('Ошибка при получении списка рекордов:', error);
-    return [];
-  }
-};
+// export const getHighScores = async (): Promise<HighScore[]> => {
+//   try {
+//     const response = await fetch('/api/high-scores');
+//     if (response.ok) {
+//       const highScores: HighScore[] = await response.json();
+//       return highScores;
+//     } else {
+//       console.error('Не удалось получить список рекордов');
+//       return [];
+//     }
+//   } catch (error) {
+//     console.error('Ошибка при получении списка рекордов:', error);
+//     return [];
+//   }
+// };
 

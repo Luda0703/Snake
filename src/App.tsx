@@ -7,7 +7,8 @@ import Snake from "./components/Snake/Snake";
 import StartBoard from "./components/StartBoard/StartBoard";
 import { ISnake } from "./interfases/ISnake";
 import RegisterForm from './components/RegisterForm/RegisterForm';
-import { handlePlayerNameSubmit } from "./options"; 
+import { handlePlayerNameSubmit, sendGameResult } from "./options"; 
+import { HighScores } from "./components/HighScores/HighScores";
 
 function App() {
   const BOARD_LENGTH = 10;
@@ -20,22 +21,41 @@ function App() {
   const [level, setLevel] = useState<number>(1);
   const [speed, setSpeed] = useState<number>(0);
   const [totalSpeed, setTotalSpeed] = useState<number>(0);
-  const generateFood = () => {
+  enum FoodType {
+    First = 'first',
+    Second = 'second',
+    Third = 'third',
+  }
+  
+  const foodValues: Record<FoodType, number> = {
+    [FoodType.First]: 1,
+    [FoodType.Second]: 5,
+    [FoodType.Third]: 10,
+  };
+ 
+  function generateFood(): { x: number; y: number; type: FoodType } {
     const x = Math.floor(Math.random() * BOARD_LENGTH);
     const y = Math.floor(Math.random() * BOARD_LENGTH);
-    return { x, y };
-  };
+  
+    const randomType = Math.random() < 0.4 ? FoodType.First : Math.random() < 0.7 ? FoodType.Second : FoodType.Third;
+  
+    return { x, y, type: randomType };
+  }
+
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [food, setFood] = useState(generateFood);
   const [isGame, setIsGame] = useState<boolean>(false);
 
   const [name, setName] = useState<string>('');
 
+
+
   const startGameHangler = () => {
     setLevel(1);
     setSpeed(0);
     setGameOver(false);
     setFood(generateFood);
+    
     setDirection("right");
     setSnake([
       { x: 1, y: 0 },
@@ -108,6 +128,8 @@ function App() {
     setSnake(newSnake);
   }, [snake, direction]);
 
+  
+
   useEffect(() => {
     const moveInterval = setInterval(snakeMoveHandler, 700 - level * 50);
     return () => {
@@ -117,9 +139,11 @@ function App() {
 
   useEffect(() => {
     if (snake[0].x === food.x && snake[0].y === food.y) {
+      const foodType = food.type;
+      const points = foodValues[foodType];
       setFood(generateFood());
       setSpeed((prev) => (prev += 10));
-      if (snake.length % 5 === 0) {
+      if (snake.length % 10 === 0) {
         if (level < 13) {
           setLevel((prev) => (prev += 1));
           setDirection("right");
@@ -139,6 +163,7 @@ function App() {
         newSnake.push(tail);
         setSnake(newSnake);
       }
+      setSpeed(speed + points);
     }
 
     for (let i = 1; i < snake.length; i++) {
@@ -150,6 +175,7 @@ function App() {
         }
       }
     }
+    
   }, [food, snake, speed, level, totalSpeed]);
 
   useEffect(() => {
@@ -171,18 +197,24 @@ function App() {
   function handlePlayerNameSubmitOn(name: string) {
     setName(name);
     handlePlayerNameSubmit(name);
+    
     console.log(`Имя игрока: ${name}`);
   }
 
+  function handleGameEnd(name: string, speed: number ) {
+    sendGameResult(name, speed);
+  }
+
   return (
-    <div>
+    <>
       <RegisterForm onSubmit={handlePlayerNameSubmitOn} /> 
       <div className="App">
         <h1 className="text">SNAKE GAME</h1>
-        <p className="gamer">Welcome {name} </p> 
+        <HighScores />
+        <p className="gamer">Welcome {name}</p> 
         <section>
           <p className="level-speed">Level: {level}</p>
-          <p className="level-speed">Score: {speed}</p>
+          <p className="level-speed">Points: {speed}</p>
         </section>
         {!isGame ? (
           <StartBoard startFn={startGameHangler} tSpeed={totalSpeed}/>
@@ -191,7 +223,7 @@ function App() {
             {!gameOver ? (
               <Food x={food.x} y={food.y} />
             ) : (
-              <GameOverBoard startFn={startGameHangler} tSpeed={totalSpeed}/>
+              <GameOverBoard startFn={startGameHangler} tSpeed={handleGameEnd} />
             )}
             {!gameOver &&
               Array.from({ length: BOARD_LENGTH * BOARD_LENGTH }, (_, i) => (
@@ -208,7 +240,7 @@ function App() {
         )}
       </div>
       <MouseController direction={direction} setDirection={setDirection} />
-    </div>
+    </>
   )
 }
 

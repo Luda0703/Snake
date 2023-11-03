@@ -1,4 +1,4 @@
-export interface IGameProps {
-    startFn: () => void,
-    tSpeed: number,
-}
+export interface GameOverBoardProps {
+    startFn: () => void;
+    tSpeed: (name: string, speed: number) => void;
+  }

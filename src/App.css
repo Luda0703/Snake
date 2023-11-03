@@ -27,14 +27,6 @@
   border: 1px solid rgb(175, 175, 175);
   box-sizing: border-box;
 }
-/* 
-.game-over {
-  position: absolute;
-  color: azure;
-  top: 10%;
-  left: 25%;
-  text-shadow: 2px 2px 2px #000;
-} */
 
 .App section {
   width: 100%;
@@ -44,20 +36,12 @@
   color: #fff;
 }
 
-/* .App section p {
-  
-  text-shadow: 2px 2px 2px #000;
-} */
-
-
 button {
   width: 80px;
   padding: 10px;
   font-weight: 700;
-  /* border: 1px solid #fff; */
   border-radius: 8px;
   box-shadow: 2px 2px 2px dimgray;
-  /* color: #fff; */
   background-color: transparent;
   border: 1px solid cadetblue;
   color: cadetblue;
@@ -82,6 +66,4 @@ button:focus {
   font-size: 20px;
   color: cadetblue;
   margin: 0;
-  /* margin-top: 0;
-  margin-bottom: 10px; */
 }
