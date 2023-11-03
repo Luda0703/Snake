@@ -60,6 +60,7 @@ button {
   background-color: transparent;
   border: 1px solid cadetblue;
   color: cadetblue;
+  cursor: pointer;
 }
 
 button:hover,
@@ -68,7 +69,8 @@ button:focus {
   color: #fff
 }
 
-/* button:active {
-  border: 1px solid #000;
-  color: #000;
-} */
+.gamer {
+  justify-content: start;
+  color: #fff;
+  font-size: 20px;
+}

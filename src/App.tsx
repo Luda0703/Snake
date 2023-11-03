@@ -6,26 +6,32 @@ import MouseController from "./components/MouseController/MouseController";
 import Snake from "./components/Snake/Snake";
 import StartBoard from "./components/StartBoard/StartBoard";
 import { ISnake } from "./interfases/ISnake";
+import RegisterForm from './components/RegisterForm/RegisterForm';
+import { handlePlayerNameSubmit } from "./options"; 
 
 function App() {
   const BOARD_LENGTH = 10;
-  const [direction, setDirection] = useState("right");
+  const [direction, setDirection] = useState<string>("right");
   const [snake, setSnake] = useState<ISnake[]>([
     { x: 1, y: 0 },
     { x: 0, y: 0 },
   ]);
 
-  const [level, setLevel] = useState(1);
-  const [speed, setSpeed] = useState(0);
-  const [totalSpeed, setTotalSpeed] = useState(0);
+  const [level, setLevel] = useState<number>(1);
+  const [speed, setSpeed] = useState<number>(0);
+  const [totalSpeed, setTotalSpeed] = useState<number>(0);
   const generateFood = () => {
     const x = Math.floor(Math.random() * BOARD_LENGTH);
     const y = Math.floor(Math.random() * BOARD_LENGTH);
     return { x, y };
   };
-  const [gameOver, setGameOver] = useState(false);
+  const [gameOver, setGameOver] = useState<boolean>(false);
   const [food, setFood] = useState(generateFood);
-  const [isGame, setIsGame] = useState(false);
+  const [isGame, setIsGame] = useState<boolean>(false);
+
+  const [name, setName] = useState<string>('');
+  const [surname, setSurname] = useState<string>('');
+  const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
 
   const startGameHangler = () => {
     setLevel(1);
@@ -164,10 +170,22 @@ function App() {
     }
   }, [totalSpeed]);
 
+  function handlePlayerNameSubmitOn(name: string, surname: string) {
+    setName(name);
+    setSurname(surname);
+    handlePlayerNameSubmit(name, surname);
+    console.log(`Имя игрока: ${name} ${surname}`);
+    setIsFormSubmitted(true);
+  }
+
   return (
-    <>
+    <div>
+    {/* {!isFormSubmitted ? (  */}
+      <RegisterForm onSubmit={handlePlayerNameSubmitOn} /> 
+    {/* ) : (  */}
       <div className="App">
         <h1 className="text">SNAKE GAME</h1>
+        <p className="gamer">Welcome {name} {surname}</p> 
         <section>
           <p className="level-speed">LEVEL: {level}</p>
           <p className="level-speed">SPEED: {speed}</p>
@@ -196,8 +214,9 @@ function App() {
         )}
       </div>
       <MouseController direction={direction} setDirection={setDirection} />
-    </>
-  );
+   {/* )}  */}
+    </div>
+  )
 }
 
-export default App;
+export default App
