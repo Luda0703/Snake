@@ -32,7 +32,8 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  gap: 100px;
+  align-items: center;
+  gap: 50px;
   color: #fff;
 }
 
@@ -67,3 +68,9 @@ button:focus {
   color: cadetblue;
   margin: 0;
 }
+
+
+/* .container_button {
+  display: flex;
+  justify-content: center;
+} */

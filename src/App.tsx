@@ -9,9 +9,10 @@ import { ISnake } from "./interfases/ISnake";
 import RegisterForm from "./components/RegisterForm/RegisterForm";
 import { handlePlayerNameSubmit, sendGameResult } from "./options";
 import { HighScores } from "./components/HighScores/HighScores";
+import PauseButton from './components/PauseButton/PauseButton';
 
 function App() {
-  const BOARD_LENGTH = 10;
+  const BOARD_LENGTH: number = 10;
   const [direction, setDirection] = useState<string>("right");
   const [snake, setSnake] = useState<ISnake[]>([
     { x: 1, y: 0 },
@@ -20,20 +21,28 @@ function App() {
 
   const [level, setLevel] = useState<number>(1);
   const [speed, setSpeed] = useState<number>(0);
+  const [isPaused, setIsPaused] = useState<boolean>(false);
   const [totalSpeed, setTotalSpeed] = useState<number>(0);
+
   enum FoodType {
     First = "first",
     Second = "second",
     Third = "third",
   }
 
-  const foodValues: Record<FoodType, number> = {
+  interface IFoodValues {
+    [FoodType.First]: number;
+    [FoodType.Second]: number;
+    [FoodType.Third]: number;
+  }
+
+  const foodValues: IFoodValues = {
     [FoodType.First]: 1,
     [FoodType.Second]: 5,
     [FoodType.Third]: 10,
   };
 
-  function generateFood(): { x: number; y: number; type: FoodType } {
+function generateFood(): { x: number; y: number; type: FoodType } {
     const x = Math.floor(Math.random() * BOARD_LENGTH);
     const y = Math.floor(Math.random() * BOARD_LENGTH);
 
@@ -167,6 +176,7 @@ function App() {
       setSpeed(speed + points);
     }
 
+
     for (let i = 1; i < snake.length; i++) {
       if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
         setGameOver(true);
@@ -176,7 +186,7 @@ function App() {
         }
       }
     }
-  }, [food, snake, speed, level, totalSpeed]);
+  }, [food, snake, speed, level, totalSpeed, isPaused]);
 
   useEffect(() => {
     document.addEventListener("keydown", pressKeyHangler);
@@ -201,6 +211,27 @@ function App() {
     console.log(`Имя игрока: ${name} `);
   }
 
+  const togglePause = () => {
+    setIsPaused(!isPaused);
+  };
+
+  const updateGame = () => {
+    if (!isPaused) {
+      const newSnake = [...snake];
+      const head = newSnake[0];
+  
+      if (head.x === food.x && head.y === food.y) {
+       
+      for (let i = 1; i < newSnake.length; i++) {
+        if (head.x === newSnake[i].x && head.y === newSnake[i].y) {
+          setGameOver(true);
+          break; 
+        }
+      }
+      setSnake(newSnake);
+    }
+  };
+
   function handleGameEnd(name: string, speed: number) {
     setName(name);
     setSpeed(speed);
@@ -218,6 +249,7 @@ function App() {
         <section>
           <p className="level-speed">Level: {level}</p>
           <p className="level-speed">Points: {speed}</p>
+          <PauseButton isPaused={isPaused} togglePause={togglePause} updateGame={updateGame}/>
         </section>
         {!isGame ? (
           <StartBoard startFn={startGameHangler} tSpeed={totalSpeed} />
@@ -247,9 +279,14 @@ function App() {
           </div>
         )}
       </div>
+      <div className="container_button">
+      
+      </div>
+      
       <MouseController direction={direction} setDirection={setDirection} />
     </>
   );
 }
+
 
 export default App;
