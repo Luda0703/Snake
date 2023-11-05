@@ -1,3 +1,4 @@
+import React from "react";
 import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import Food from "./components/Food/Food";
@@ -8,10 +9,10 @@ import StartBoard from "./components/StartBoard/StartBoard";
 import { ISnake } from "./interfases/ISnake";
 import RegisterForm from "./components/RegisterForm/RegisterForm";
 import { handlePlayerNameSubmit, sendGameResult } from "./options";
-import { HighScores } from "./components/HighScores/HighScores";
-import PauseButton from './components/PauseButton/PauseButton';
+import HighScores from "./components/HighScores/HighScores";
+import PauseButton from "./components/PauseButton/PauseButton";
 
-function App() {
+export const App =  () => {
   const BOARD_LENGTH: number = 10;
   const [direction, setDirection] = useState<string>("right");
   const [snake, setSnake] = useState<ISnake[]>([
@@ -42,7 +43,7 @@ function App() {
     [FoodType.Third]: 10,
   };
 
-function generateFood(): { x: number; y: number; type: FoodType } {
+  function generateFood(): { x: number; y: number; type: FoodType } {
     const x = Math.floor(Math.random() * BOARD_LENGTH);
     const y = Math.floor(Math.random() * BOARD_LENGTH);
 
@@ -176,7 +177,6 @@ function generateFood(): { x: number; y: number; type: FoodType } {
       setSpeed(speed + points);
     }
 
-
     for (let i = 1; i < snake.length; i++) {
       if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
         setGameOver(true);
@@ -219,74 +219,71 @@ function generateFood(): { x: number; y: number; type: FoodType } {
     if (!isPaused) {
       const newSnake = [...snake];
       const head = newSnake[0];
-  
+
       if (head.x === food.x && head.y === food.y) {
-       
-      for (let i = 1; i < newSnake.length; i++) {
-        if (head.x === newSnake[i].x && head.y === newSnake[i].y) {
-          setGameOver(true);
-          break; 
+        for (let i = 1; i < newSnake.length; i++) {
+          if (head.x === newSnake[i].x && head.y === newSnake[i].y) {
+            setGameOver(true);
+            break;
+          }
         }
+        setSnake(newSnake);
       }
-      setSnake(newSnake);
     }
-  };
 
-  function handleGameEnd(name: string, speed: number) {
-    setName(name);
-    setSpeed(speed);
-    sendGameResult(name, speed);
-    console.log(`Имя игрока: ${name} speed: ${speed}`);
+    function handleGameEnd(name: string, speed: number) {
+      setName(name);
+      setSpeed(speed);
+      sendGameResult(name, speed);
+      console.log(`Имя игрока: ${name} speed: ${speed}`);
+    }
+
+    return (
+      <div>
+        <RegisterForm onSubmit={handlePlayerNameSubmitOn} />
+        <div className="App">
+          <h1 className="text">SNAKE GAME</h1>
+          <HighScores name={name} speed={speed} />
+          <p className="gamer">Welcome {name}</p>
+          <section>
+            <p className="level-speed">Level: {level}</p>
+            <p className="level-speed">Points: {speed}</p>
+            <PauseButton
+              isPaused={isPaused}
+              togglePause={togglePause}
+              updateGame={updateGame}
+            />
+          </section>
+          {!isGame ? (
+            <StartBoard startFn={startGameHangler} />
+          ) : (
+            <div className="gameBord">
+              {!gameOver ? (
+                <Food x={food.x} y={food.y} />
+              ) : (
+                <GameOverBoard
+                  startFn={startGameHangler}
+                  tSpeed={handleGameEnd}
+                  name={name}
+                  speed={speed}
+                />
+              )}
+              {!gameOver &&
+                Array.from({ length: BOARD_LENGTH * BOARD_LENGTH }, (_, i) => (
+                  <div key={i} className="item">
+                    {snake.some((element) => isSnakeChack(element, i)) && (
+                      <Snake
+                        isHead={isSnakeChack(snake[0], i)}
+                        direction={direction}
+                      />
+                    )}
+                  </div>
+                ))}
+            </div>
+          )}
+        </div>
+        <MouseController direction={direction} setDirection={setDirection} />
+      </div>
+    );
   }
-
-  return (
-    <>
-      <RegisterForm onSubmit={handlePlayerNameSubmitOn} />
-      <div className="App">
-        <h1 className="text">SNAKE GAME</h1>
-        <HighScores />
-        <p className="gamer">Welcome {name}</p>
-        <section>
-          <p className="level-speed">Level: {level}</p>
-          <p className="level-speed">Points: {speed}</p>
-          <PauseButton isPaused={isPaused} togglePause={togglePause} updateGame={updateGame}/>
-        </section>
-        {!isGame ? (
-          <StartBoard startFn={startGameHangler} tSpeed={totalSpeed} />
-        ) : (
-          <div className="gameBord">
-            {!gameOver ? (
-              <Food x={food.x} y={food.y} />
-            ) : (
-              <GameOverBoard
-                startFn={startGameHangler}
-                tSpeed={handleGameEnd}
-                name={name}
-  speed={speed}
-              />
-            )}
-            {!gameOver &&
-              Array.from({ length: BOARD_LENGTH * BOARD_LENGTH }, (_, i) => (
-                <div key={i} className="item">
-                  {snake.some((element) => isSnakeChack(element, i)) && (
-                    <Snake
-                      isHead={isSnakeChack(snake[0], i)}
-                      direction={direction}
-                    />
-                  )}
-                </div>
-              ))}
-          </div>
-        )}
-      </div>
-      <div className="container_button">
-      
-      </div>
-      
-      <MouseController direction={direction} setDirection={setDirection} />
-    </>
-  );
 }
-
-
-export default App;

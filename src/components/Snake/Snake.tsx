@@ -1,3 +1,4 @@
+import React from 'react';
 import { ISnakeProps } from "../../interfases/ISnakeProps";
 import "./Snake.css";
 

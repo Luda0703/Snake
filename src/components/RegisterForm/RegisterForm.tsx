@@ -1,5 +1,5 @@
-import { FC, ChangeEvent, FormEvent, useState } from "react";
-import IPlayerNameFormProps from '../../interfases/IPlayerNameFormProps'
+import React, { FC, ChangeEvent, FormEvent, useState } from "react";
+import {IPlayerNameFormProps} from '../../interfases/IPlayerNameFormProps'
 import "./RegisterForm.css";
 
 

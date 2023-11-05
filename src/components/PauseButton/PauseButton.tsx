@@ -1,9 +1,8 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import {IPauseButtonProps} from '../../interfases/IPauseButtonProps';
 
 const PauseButton: FC<IPauseButtonProps> = ({ isPaused, togglePause, updateGame }) => {
     
-
     const handlePauseClick = () => {
         togglePause(!isPaused);
         updateGame;

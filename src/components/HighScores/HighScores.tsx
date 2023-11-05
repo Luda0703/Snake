@@ -1,4 +1,4 @@
-import { useState, useEffect, FC } from "react";
+import React, { useState, useEffect, FC } from "react";
 import "./HighScores.css";
 
 type HighScoresProps = {
@@ -6,7 +6,7 @@ type HighScoresProps = {
   speed: number;
 };
 
-export const HighScores: FC<HighScoresProps> = () => {
+const HighScores: FC<HighScoresProps> = () => {
   const [highScores, setHighScores] = useState<HighScoresProps[]>([]);
 
   useEffect(() => {
@@ -36,3 +36,5 @@ export const HighScores: FC<HighScoresProps> = () => {
     </div>
   );
 };
+
+export default HighScores;

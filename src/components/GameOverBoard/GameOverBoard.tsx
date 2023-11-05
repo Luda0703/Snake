@@ -1,14 +1,10 @@
-import { FC, useState} from "react";
-import { GameOverBoardProps } from "../../interfases/IGameProps";
+import React from "react";
+import { GameOverBoardProps } from "../../interfases/GameOverBoardProps";
 import "./GameOverBoard.css";
 
-const GameOverBoard: FC<GameOverBoardProps> = ({ startFn, tSpeed, name, speed }) => {
-  // const [speed, setSpeed] = useState<number>(0);
-  // const [name, setName] = useState<string>("");
+const GameOverBoard: React.FC<GameOverBoardProps> = ({ startFn, tSpeed,  name, speed }) => {
 
   const handleTSpeedClick = () => {
-    // setName(name);
-    // setSpeed(speed);
     tSpeed(name, speed);
   };
 
