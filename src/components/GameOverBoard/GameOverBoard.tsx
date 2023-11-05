@@ -1,19 +1,20 @@
-import { FC } from "react";
+import { FC, useState} from "react";
 import { GameOverBoardProps } from "../../interfases/IGameProps";
 import "./GameOverBoard.css";
 
-const GameOverBoard: FC<GameOverBoardProps> = ({ startFn, tSpeed }) => {
-  const handleTSpeedClick = () => {
-    tSpeed();
-  };
+const GameOverBoard: FC<GameOverBoardProps> = ({ startFn, tSpeed, name, speed }) => {
+  // const [speed, setSpeed] = useState<number>(0);
+  // const [name, setName] = useState<string>("");
 
-  const totalSpeed = () => {
-    tSpeed();
-  }
+  const handleTSpeedClick = () => {
+    // setName(name);
+    // setSpeed(speed);
+    tSpeed(name, speed);
+  };
 
   return (
     <div className="gameOverBoard">
-      <p className="text-start">TOTAL SPEED: {totalSpeed}</p>
+      <p className="text-start">TOTAL SPEED: {speed}</p>
       <button onClick={startFn}>START</button>
       <button onClick={handleTSpeedClick}>Submit Score</button>
     </div>

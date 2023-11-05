@@ -20,30 +20,50 @@ export function handlePlayerNameSubmit(name: string) {
 }
 
 
-export interface GameData {
-  snakeCoordinates: [number, number][];
-  foodPosition: [number, number];
+// export interface GameData {
+//   snakeCoordinates: [number, number][];
+//   foodPosition: [number, number];
+// }
+
+export function sendGameResult(name: string, speed: number) {
+  fetch('http://localhost:8080/api/record', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ name, speed }),
+  })
+    .then((response) => {
+      if (response.ok) {
+        console.log('Имя игрока успешно отправлено на сервер');       
+      } else {
+        console.error('Не удалось отправить имя игрока на сервер');
+      }
+    })
+    .catch((error) => {
+      console.error('Ошибка при отправке имени игрока:', error);
+    });
 }
 
-export const sendGameResult = async (name: string, speed: number) => {
-  try {
-    const response = await fetch('http://localhost:8080/api/record', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, speed }),
-    });
+// export const sendGameResult = async (name: string, speed: number) => {
+//   try {
+//     const response = await fetch('http://localhost:8080/api/record', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({ name, speed }),
+//     });
 
-    if (response.ok) {
-      console.log('Результат игры отправлен на сервер');
-    } else {
-      console.error('Не удалось отправить результат игры');
-    }
-  } catch (error) {
-    console.error('Ошибка при отправке результатов игры:', error);
-  }
-};
+//     if (response.ok) {
+//       console.log('Результат игры отправлен на сервер');
+//     } else {
+//       console.error('Не удалось отправить результат игры');
+//     }
+//   } catch (error) {
+//     console.error('Ошибка при отправке результатов игры:', error);
+//   }
+// };
 
 
 // export interface HighScore {

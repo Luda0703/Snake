@@ -198,11 +198,14 @@ function App() {
     setName(name);
     handlePlayerNameSubmit(name);
 
-    console.log(`Имя игрока: ${name}`);
+    console.log(`Имя игрока: ${name} `);
   }
 
   function handleGameEnd(name: string, speed: number) {
+    setName(name);
+    setSpeed(speed);
     sendGameResult(name, speed);
+    console.log(`Имя игрока: ${name} speed: ${speed}`);
   }
 
   return (
@@ -226,6 +229,8 @@ function App() {
               <GameOverBoard
                 startFn={startGameHangler}
                 tSpeed={handleGameEnd}
+                name={name}
+  speed={speed}
               />
             )}
             {!gameOver &&
