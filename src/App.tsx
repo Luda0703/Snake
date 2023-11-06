@@ -60,9 +60,8 @@ const App: React.FC =  () => {
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [food, setFood] = useState(generateFood);
   const [isGame, setIsGame] = useState<boolean>(false);
-
   const [name, setName] = useState<string>("");
-
+  
   const startGameHangler = () => {
     setLevel(1);
     setSpeed(0);
@@ -75,6 +74,8 @@ const App: React.FC =  () => {
       { x: 0, y: 0 },
     ]);
     setIsGame(true);
+    setIsPaused(false);
+
   };
 
   const isSnakeChack = (element: ISnake, index: number) => {
@@ -114,6 +115,10 @@ const App: React.FC =  () => {
   );
 
   const snakeMoveHandler = useCallback(() => {
+    if (isPaused) {
+      return; 
+    }
+    
     const newSnake = [...snake];
     const snakeHead = { ...newSnake[0] };
 
@@ -139,7 +144,7 @@ const App: React.FC =  () => {
       newSnake.pop();
     }
     setSnake(newSnake);
-  }, [snake, direction]);
+  }, [snake, direction, isPaused]);
 
   useEffect(() => {
     const moveInterval = setInterval(snakeMoveHandler, 700 - level * 50);
@@ -180,6 +185,7 @@ const App: React.FC =  () => {
     for (let i = 1; i < snake.length; i++) {
       if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
         setGameOver(true);
+        setIsPaused(true);
         if (totalSpeed < speed) {
           localStorage.setItem("totalSpeed", JSON.stringify(speed));
           setTotalSpeed(speed);
@@ -211,26 +217,10 @@ const App: React.FC =  () => {
     console.log(`Имя игрока: ${name} `);
   }
 
+ 
   const togglePause = () => {
     setIsPaused(!isPaused);
   };
-
-  const updateGame = () => {
-    if (!isPaused) {
-      const newSnake = [...snake];
-      const head = newSnake[0];
-
-      if (head.x === food.x && head.y === food.y) {
-        for (let i = 1; i < newSnake.length; i++) {
-          if (head.x === newSnake[i].x && head.y === newSnake[i].y) {
-            setGameOver(true);
-            break;
-          }
-        }
-        setSnake(newSnake);
-      }
-    }
-  }
 
     function handleGameEnd(name: string, speed: number) {
       setName(name);
@@ -252,7 +242,6 @@ const App: React.FC =  () => {
             <PauseButton
               isPaused={isPaused}
               togglePause={togglePause}
-              updateGame={updateGame}
             />
           </section>
           {!isGame ? (
