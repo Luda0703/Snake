@@ -12,7 +12,7 @@ import { handlePlayerNameSubmit, sendGameResult } from "./options";
 import HighScores from "./components/HighScores/HighScores";
 import PauseButton from "./components/PauseButton/PauseButton";
 
-export const App =  () => {
+const App: React.FC =  () => {
   const BOARD_LENGTH: number = 10;
   const [direction, setDirection] = useState<string>("right");
   const [snake, setSnake] = useState<ISnake[]>([
@@ -230,6 +230,7 @@ export const App =  () => {
         setSnake(newSnake);
       }
     }
+  }
 
     function handleGameEnd(name: string, speed: number) {
       setName(name);
@@ -243,7 +244,7 @@ export const App =  () => {
         <RegisterForm onSubmit={handlePlayerNameSubmitOn} />
         <div className="App">
           <h1 className="text">SNAKE GAME</h1>
-          <HighScores name={name} speed={speed} />
+          <HighScores />
           <p className="gamer">Welcome {name}</p>
           <section>
             <p className="level-speed">Level: {level}</p>
@@ -286,4 +287,6 @@ export const App =  () => {
       </div>
     );
   }
-}
+
+
+export default App

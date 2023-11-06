@@ -1,15 +1,17 @@
 import React, { useState, useEffect, FC } from "react";
 import "./HighScores.css";
+// import {sendGameResult} from '../../options'
 
 type HighScoresProps = {
   name: string;
   speed: number;
 };
 
-const HighScores: FC<HighScoresProps> = () => {
+const HighScores: FC = () => {
   const [highScores, setHighScores] = useState<HighScoresProps[]>([]);
 
   useEffect(() => {
+  
     fetch("http://localhost:8080/api/record")
       .then((response) => {
         if (!response.ok) {
