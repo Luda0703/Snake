@@ -8,11 +8,11 @@ import Snake from "./components/Snake/Snake";
 import StartBoard from "./components/StartBoard/StartBoard";
 import { ISnake } from "./interfases/ISnake";
 import RegisterForm from "./components/RegisterForm/RegisterForm";
-import { handlePlayerNameSubmit, sendGameResult } from "./options";
+import { handlePlayerNameSubmit } from "./servise";
 import HighScores from "./components/HighScores/HighScores";
 import PauseButton from "./components/PauseButton/PauseButton";
 
-const App: React.FC =  () => {
+const App: React.FC = () => {
   const BOARD_LENGTH: number = 10;
   const [direction, setDirection] = useState<string>("right");
   const [snake, setSnake] = useState<ISnake[]>([
@@ -61,7 +61,8 @@ const App: React.FC =  () => {
   const [food, setFood] = useState(generateFood);
   const [isGame, setIsGame] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
-  
+  const [gameResult, setGameResult] = useState<{ name: string } | null>(null);
+
   const startGameHangler = () => {
     setLevel(1);
     setSpeed(0);
@@ -75,7 +76,6 @@ const App: React.FC =  () => {
     ]);
     setIsGame(true);
     setIsPaused(false);
-
   };
 
   const isSnakeChack = (element: ISnake, index: number) => {
@@ -116,9 +116,9 @@ const App: React.FC =  () => {
 
   const snakeMoveHandler = useCallback(() => {
     if (isPaused) {
-      return; 
+      return;
     }
-    
+
     const newSnake = [...snake];
     const snakeHead = { ...newSnake[0] };
 
@@ -186,10 +186,6 @@ const App: React.FC =  () => {
       if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
         setGameOver(true);
         setIsPaused(true);
-        if (totalSpeed < speed) {
-          localStorage.setItem("totalSpeed", JSON.stringify(speed));
-          setTotalSpeed(speed);
-        }
       }
     }
   }, [food, snake, speed, level, totalSpeed, isPaused]);
@@ -213,69 +209,83 @@ const App: React.FC =  () => {
   function handlePlayerNameSubmitOn(name: string) {
     setName(name);
     handlePlayerNameSubmit(name);
-
-    console.log(`Имя игрока: ${name} `);
+    if (name) {
+      localStorage.setItem("name", JSON.stringify(name));
+      setName(name);
+    }
   }
 
- 
   const togglePause = () => {
     setIsPaused(!isPaused);
   };
 
-    function handleGameEnd(name: string, speed: number) {
-      setName(name);
-      setSpeed(speed);
-      sendGameResult(name, speed);
-      console.log(`Имя игрока: ${name} speed: ${speed}`);
-    }
-
-    return (
-      <div>
-        <RegisterForm onSubmit={handlePlayerNameSubmitOn} />
-        <div className="App">
-          <h1 className="text">SNAKE GAME</h1>
-          <HighScores />
-          <p className="gamer">Welcome {name}</p>
-          <section>
-            <p className="level-speed">Level: {level}</p>
-            <p className="level-speed">Points: {speed}</p>
-            <PauseButton
-              isPaused={isPaused}
-              togglePause={togglePause}
-            />
-          </section>
-          {!isGame ? (
-            <StartBoard startFn={startGameHangler} />
-          ) : (
-            <div className="gameBord">
-              {!gameOver ? (
-                <Food x={food.x} y={food.y} />
-              ) : (
-                <GameOverBoard
-                  startFn={startGameHangler}
-                  tSpeed={handleGameEnd}
-                  name={name}
-                  speed={speed}
-                />
-              )}
-              {!gameOver &&
-                Array.from({ length: BOARD_LENGTH * BOARD_LENGTH }, (_, i) => (
-                  <div key={i} className="item">
-                    {snake.some((element) => isSnakeChack(element, i)) && (
-                      <Snake
-                        isHead={isSnakeChack(snake[0], i)}
-                        direction={direction}
-                      />
-                    )}
-                  </div>
-                ))}
-            </div>
-          )}
-        </div>
-        <MouseController direction={direction} setDirection={setDirection} />
-      </div>
-    );
+  function handleGameEnd(name: string, speed: number) {
+    setName(name);
+    setSpeed(speed);
+    setGameResult({ name });
   }
 
+  const handleExitGame = () => {
+    togglePause();
+    setLevel(1);
+    setSpeed(0);
+    setGameOver(false);
+    setFood(generateFood());
+    setDirection("right");
+    setSnake([
+      { x: 1, y: 0 },
+      { x: 0, y: 0 },
+    ]);
+    setIsGame(false);
+    setIsPaused(false);
+  };
 
-export default App
+  return (
+    <div>
+      <RegisterForm onSubmit={handlePlayerNameSubmitOn} />
+      <div className="App">
+        <h1 className="text">SNAKE GAME</h1>
+        <HighScores gameResult={gameResult} />
+        <p className="gamer">Welcome {name}</p>
+        <section>
+          <p className="level-speed">LEVEL: {level}</p>
+          <p className="level-speed">POINTS: {speed}</p>
+        </section>
+        <section>
+          <PauseButton isPaused={isPaused} togglePause={togglePause} />
+          <button onClick={handleExitGame}>EXIT</button>
+        </section>
+        {!isGame ? (
+          <StartBoard startFn={startGameHangler} />
+        ) : (
+          <div className="gameBord">
+            {!gameOver ? (
+              <Food x={food.x} y={food.y} />
+            ) : (
+              <GameOverBoard
+                startFn={startGameHangler}
+                tSpeed={handleGameEnd}
+                name={name}
+                speed={speed}
+              />
+            )}
+            {!gameOver &&
+              Array.from({ length: BOARD_LENGTH * BOARD_LENGTH }, (_, i) => (
+                <div key={i} className="item">
+                  {snake.some((element) => isSnakeChack(element, i)) && (
+                    <Snake
+                      isHead={isSnakeChack(snake[0], i)}
+                      direction={direction}
+                    />
+                  )}
+                </div>
+              ))}
+          </div>
+        )}
+      </div>
+      <MouseController direction={direction} setDirection={setDirection} />
+    </div>
+  );
+};
+
+export default App;

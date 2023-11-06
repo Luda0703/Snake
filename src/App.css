@@ -1,9 +1,8 @@
 .App {
-  display: flex; 
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
 }
 
 .text {
@@ -35,6 +34,7 @@
   align-items: center;
   gap: 50px;
   color: #fff;
+  margin-bottom: 10px;
 }
 
 button {
@@ -51,11 +51,9 @@ button {
 
 button:hover,
 button:focus {
-  background-color:cadetblue;
-  color: #fff
+  background-color: cadetblue;
+  color: #fff;
 }
-
-
 
 .gamer {
   justify-content: start;
@@ -64,13 +62,9 @@ button:focus {
 }
 
 .level-speed {
-  font-size: 20px;
+  text-align: center;
+  font-weight: 700;
   color: cadetblue;
   margin: 0;
+  width: 100px;
 }
-
-
-/* .container_button {
-  display: flex;
-  justify-content: center;
-} */
